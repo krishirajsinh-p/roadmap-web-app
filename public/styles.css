@@ -1,0 +1,99 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+    background-color: #f0f8ff;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+}
+
+#sidebar {
+    width: 250px;
+    background-color: #34495e;
+    color: #ecf0f1;
+    transition: all 0.3s;
+    overflow-y: auto;
+    z-index: 10;
+}
+
+#sidebar.collapsed {
+    width: 0;
+    overflow: hidden;
+}
+
+#sidebar h3 {
+    padding: 20px;
+    margin: 0;
+    background-color: #2c3e50;
+}
+
+#file-list {
+    padding: 10px;
+}
+
+#file-list div {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#file-list div:hover {
+    background-color: #2980b9;
+}
+
+#content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#toolbar {
+    background-color: #3498db;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    z-index: 10;
+}
+
+#toggle-sidebar,
+#toggle-theme,
+#zoom-in,
+#zoom-out,
+#reset-zoom {
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    margin-right: 15px;
+    transition: transform 0.2s;
+}
+
+#toggle-sidebar:hover,
+#toggle-theme:hover,
+#zoom-in:hover,
+#zoom-out:hover,
+#reset-zoom:hover {
+    transform: scale(1.1);
+}
+
+#diagram-container {
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+#diagram-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.05s;
+}
