@@ -30,6 +30,52 @@ export function reset() {
 export function setupPanZoom() {
     setupZoom();
     setupDrag();
+    setupTouchGestures();
+}
+
+function setupTouchGestures() {
+    diagramWrapper.addEventListener('touchstart', handleTouchStart, { passive: false });
+    diagramWrapper.addEventListener('touchmove', handleTouchMove, { passive: false });
+    diagramWrapper.addEventListener('touchend', handleTouchEnd, { passive: false });
+    diagramWrapper.addEventListener('wheel', handleWheel, { passive: false });
+}
+
+function handleTouchStart(e) {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+        lastTouchDistance = getTouchDistance(e.touches);
+    } else if (e.touches.length === 1) {
+        startDrag(e.touches[0]);
+    }
+}
+
+function handleTouchMove(e) {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+        const currentDistance = getTouchDistance(e.touches);
+        const delta = currentDistance - lastTouchDistance;
+        zoom(delta * 0.01);
+        lastTouchDistance = currentDistance;
+    } else if (e.touches.length === 1 && isDragging) {
+        drag(e.touches[0]);
+    }
+}
+
+function handleTouchEnd(e) {
+    e.preventDefault();
+    endDrag();
+}
+
+function handleWheel(e) {
+    e.preventDefault();
+    const delta = e.deltaY * -0.01;
+    zoom(delta);
+}
+
+function getTouchDistance(touches) {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
 }
 
 function setupZoom() {
