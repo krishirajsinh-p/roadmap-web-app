@@ -1,128 +1,192 @@
 flowchart LR
+    %% Define styles for nodes
+    classDef cloud fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef provider fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef infrastructure fill:#ffeb3b,stroke:#333,stroke-width:2px;
+    classDef container fill:#ffccbc,stroke:#333,stroke-width:2px;
+    classDef serverless fill:#c8e6c9,stroke:#333,stroke-width:2px;
+    classDef ci_cd fill:#d1c4e9,stroke:#333,stroke-width:2px;
+    classDef version_control fill:#b2ebf2,stroke:#333,stroke-width:2px;
+    classDef programming fill:#ffe0b2,stroke:#333,stroke-width:2px;
+    classDef database fill:#f0f4c3,stroke:#333,stroke-width:2px;
+    classDef monitoring fill:#e1bee7,stroke:#333,stroke-width:2px;
+    classDef api fill:#cfd8dc,stroke:#333,stroke-width:2px;
+    classDef security fill:#ffab91,stroke:#333,stroke-width:2px;
+
     A[Front-end Cloud Development] --> B[Cloud Fundamentals]
-    
+
     subgraph Cloud_Fundamentals
-    B1[How does cloud computing work?]
-    B2[Cloud service models]
-    B3[Cloud deployment models]
-    B4[Cloud security basics]
-    B --> B1
-    B --> B2
-    B --> B3
-    B --> B4
+        B1[How does cloud computing work?]
+        B2[Cloud service models]
+        B3[Cloud deployment models]
+        B4[Cloud security basics]
+        B --> B1
+        B --> B2
+        B --> B3
+        B --> B4
     end
 
     B --> C[Cloud Providers]
 
     subgraph Cloud_Providers
-    C1[AWS]
-    C2[Azure]
-    C3[Google Cloud]
-    C --> C1
-    C --> C2
-    C --> C3
+        C1[AWS]
+        C2[Azure]
+        C3[Google Cloud]
+        C --> C1
+        C --> C2
+        C --> C3
     end
 
     C --> D[Infrastructure as Code]
 
     subgraph Infrastructure_as_Code
-    D1[Terraform]
-    D2[CloudFormation]
-    D3[ARM Templates]
-    D --> D1
-    D --> D2
-    D --> D3
+        D1[Terraform]
+        D2[CloudFormation]
+        D3[ARM Templates]
+        D --> D1
+        D --> D2
+        D --> D3
     end
 
     D --> E[Containerization]
 
     subgraph Containerization
-    E1[Docker]
-    E2[Kubernetes]
-    E --> E1
-    E --> E2
+        E1[Docker]
+        E2[Kubernetes]
+        E --> E1
+        E --> E2
     end
 
     E --> F[Serverless]
 
     subgraph Serverless
-    F1[AWS Lambda]
-    F2[Azure Functions]
-    F3[Google Cloud Functions]
-    F --> F1
-    F --> F2
-    F --> F3
+        F1[AWS Lambda]
+        F2[Azure Functions]
+        F3[Google Cloud Functions]
+        F --> F1
+        F --> F2
+        F --> F3
     end
 
     F --> G[CI/CD]
 
     subgraph CI_CD
-    G1[Jenkins]
-    G2[GitLab CI]
-    G3[GitHub Actions]
-    G --> G1
-    G --> G2
-    G --> G3
+        G1[Jenkins]
+        G2[GitLab CI]
+        G3[GitHub Actions]
+        G --> G1
+        G --> G2
+        G --> G3
     end
 
     G --> H[Version Control Systems]
 
     subgraph Version_Control_Systems
-    H1[Git]
-    H2[GitHub]
-    H3[GitLab]
-    H --> H1
-    H --> H2
-    H --> H3
+        H1[Git]
+        H2[GitHub]
+        H3[GitLab]
+        H --> H1
+        H --> H2
+        H --> H3
     end
 
     H --> I[Programming Languages]
 
     subgraph Programming_Languages
-    I1[Python]
-    I2[JavaScript/Node.js]
-    I3[Go]
-    I --> I1
-    I --> I2
-    I --> I3
+        I1[Python]
+        I2[JavaScript/Node.js]
+        I3[Go]
+        I --> I1
+        I --> I2
+        I --> I3
     end
 
     I --> J[Databases]
 
     subgraph Databases
-    J1[SQL]
-    J2[NoSQL]
-    J --> J1
-    J --> J2
+        J1[SQL]
+        J2[NoSQL]
+        J --> J1
+        J --> J2
     end
 
     J --> K[Monitoring and Logging]
 
     subgraph Monitoring_and_Logging
-    K1[Prometheus]
-    K2[ELK Stack]
-    K3[Cloud-native monitoring tools]
-    K --> K1
-    K --> K2
-    K --> K3
+        K1[Prometheus]
+        K2[ELK Stack]
+        K3[Cloud-native monitoring tools]
+        K --> K1
+        K --> K2
+        K --> K3
     end
 
     K --> L[API Development]
 
     subgraph API_Development
-    L1[RESTful APIs]
-    L2[GraphQL]
-    L --> L1
-    L --> L2
+        L1[RESTful APIs]
+        L2[GraphQL]
+        L --> L1
+        L --> L2
     end
 
     L --> M[Security]
 
     subgraph Security
-    M1[Identity and Access Management]
-    M2[Encryption]
-    M3[Network Security]
-    M --> M1
-    M --> M2
-    M --> M3
+        M1[Identity and Access Management]
+        M2[Encryption]
+        M3[Network Security]
+        M --> M1
+        M --> M2
+        M --> M3
     end
+
+    %% Adding links to nodes
+    click B1 "https://en.wikipedia.org/wiki/Cloud_computing" _blank
+    click B2 "https://en.wikipedia.org/wiki/Cloud_computing#Service_models" _blank
+    click B3 "https://en.wikipedia.org/wiki/Cloud_computing#Deployment_models" _blank
+    click B4 "https://en.wikipedia.org/wiki/Cloud_computing_security" _blank
+    click C1 "https://en.wikipedia.org/wiki/Amazon_Web_Services" _blank
+    click C2 "https://en.wikipedia.org/wiki/Microsoft_Azure" _blank
+    click C3 "https://en.wikipedia.org/wiki/Google_Cloud_Platform" _blank
+    click D1 "https://en.wikipedia.org/wiki/Terraform_(software)" _blank
+    click D2 "https://en.wikipedia.org/wiki/AWS_CloudFormation" _blank
+    click D3 "https://en.wikipedia.org/wiki/Azure_Resource_Manager" _blank
+    click E1 "https://en.wikipedia.org/wiki/Docker_(software)" _blank
+    click E2 "https://en.wikipedia.org/wiki/Kubernetes" _blank
+    click F1 "https://en.wikipedia.org/wiki/AWS_Lambda" _blank
+    click F2 "https://en.wikipedia.org/wiki/Azure_Functions" _blank
+    click F3 "https://en.wikipedia.org/wiki/Google_Cloud_Functions" _blank
+    click G1 "https://en.wikipedia.org/wiki/Jenkins_(software)" _blank
+    click G2 "https://en.wikipedia.org/wiki/GitLab" _blank
+    click G3 "https://en.wikipedia.org/wiki/GitHub_Actions" _blank
+    click H1 "https://en.wikipedia.org/wiki/Git" _blank
+    click H2 "https://en.wikipedia.org/wiki/GitHub" _blank
+    click H3 "https://en.wikipedia.org/wiki/GitLab" _blank
+    click I1 "https://en.wikipedia.org/wiki/Python_(programming_language)" _blank
+    click I2 "https://en.wikipedia.org/wiki/JavaScript" _blank
+    click I3 "https://en.wikipedia.org/wiki/Go_(programming_language)" _blank
+    click J1 "https://en.wikipedia.org/wiki/SQL" _blank
+    click J2 "https://en.wikipedia.org/wiki/NoSQL" _blank
+    click K1 "https://en.wikipedia.org/wiki/Prometheus_(software)" _blank
+    click K2 "https://en.wikipedia.org/wiki/ELK_Stack" _blank
+    click K3 "https://en.wikipedia.org/wiki/Cloud_computing" _blank
+    click L1 "https://en.wikipedia.org/wiki/Representational_state_transfer" _blank
+    click L2 "https://en.wikipedia.org/wiki/GraphQL" _blank
+    click M1 "https://en.wikipedia.org/wiki/Identity_management" _blank
+    click M2 "https://en.wikipedia.org/wiki/Encryption" _blank
+    click M3 "https://en.wikipedia.org/wiki/Network_security" _blank
+
+    %% Apply styles to nodes
+    class B,B1,B2,B3,B4 cloud;
+    class C,C1,C2,C3 provider;
+    class D,D1,D2,D3 infrastructure;
+    class E,E1,E2 container;
+    class F,F1,F2,F3 serverless;
+    class G,G1,G2,G3 ci_cd;
+    class H,H1,H2,H3 version_control;
+    class I,I1,I2,I3 programming;
+    class J,J1,J2 database;
+    class K,K1,K2,K3 monitoring;
+    class L,L1,L2 api;
+    class M,M1,M2,M3 security;
