@@ -1,0 +1,47 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+        pre {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <center>
+        <pre include-mermaid="./diagram.mmd"></pre>
+    </center>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true });
+
+        function processElement(value) {
+            var file = value.getAttribute("include-mermaid");
+            if (file) {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        value.innerHTML = this.responseText;
+                        value.setAttribute("class", "mermaid");
+                        mermaid.init(undefined, value);
+                    }
+                };
+                xhttp.open("GET", file, true);
+                xhttp.send();
+            }
+        }
+
+        var elements = document.querySelectorAll('[include-mermaid]');
+        elements.forEach(processElement);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mermaid Diagram Viewer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #f0f8ff;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-mode {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+        }
+
+        #sidebar {
+            width: 250px;
+            background-color: #34495e;
+            color: #ecf0f1;
+            transition: all 0.3s;
+            overflow-y: auto;
+            z-index: 10;
+        }
+
+        #sidebar.collapsed {
+            width: 0;
+            overflow: hidden;
+        }
+
+        #sidebar h3 {
+            padding: 20px;
+            margin: 0;
+            background-color: #2c3e50;
+        }
+
+        #file-list {
+            padding: 10px;
+        }
+
+        #file-list div {
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        #file-list div:hover {
+            background-color: #2980b9;
+        }
+
+        #content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #toolbar {
+            background-color: #3498db;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            z-index: 10;
+        }
+
+        #toggle-sidebar,
+        #toggle-theme,
+        #zoom-in,
+        #zoom-out,
+        #reset-zoom {
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            margin-right: 15px;
+            transition: transform 0.2s;
+        }
+
+        #toggle-sidebar:hover,
+        #toggle-theme:hover,
+        #zoom-in:hover,
+        #zoom-out:hover,
+        #reset-zoom:hover {
+            transform: scale(1.1);
+        }
+
+        #diagram-container {
+            flex-grow: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #diagram-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: transform 0.05s;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="sidebar">
+        <h3>Mermaid Files</h3>
+        <div id="file-list"></div>
+    </div>
+    <div id="content">
+        <div id="toolbar">
+            <button id="toggle-sidebar" title="Toggle Sidebar"><i class="fas fa-chevron-left"></i></button>
+            <button id="toggle-theme" title="Toggle Dark Mode"><i class="fas fa-adjust"></i></button>
+            <button id="zoom-in" title="Zoom In"><i class="fas fa-search-plus"></i></button>
+            <button id="zoom-out" title="Zoom Out"><i class="fas fa-search-minus"></i></button>
+            <button id="reset-zoom" title="Reset Zoom"><i class="fas fa-expand"></i></button>
+        </div>
+        <div id="diagram-container">
+            <div id="diagram-wrapper"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: false });
+
+        const sidebar = document.getElementById('sidebar');
+        const toggleButton = document.getElementById('toggle-sidebar');
+        const toggleThemeButton = document.getElementById('toggle-theme');
+        const zoomInButton = document.getElementById('zoom-in');
+        const zoomOutButton = document.getElementById('zoom-out');
+        const resetZoomButton = document.getElementById('reset-zoom');
+        const diagramWrapper = document.getElementById('diagram-wrapper');
+
+        let currentZoom = 1;
+        let isDragging = false;
+        let startX, startY, translateX = 0, translateY = 0;
+
+        toggleButton.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            toggleButton.innerHTML = sidebar.classList.contains('collapsed') ? '<i class="fas fa-bars"></i>' : '<i class="fas fa-chevron-left"></i>';
+        });
+
+        toggleThemeButton.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            toggleThemeButton.innerHTML = document.body.classList.contains('dark-mode') ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+        });
+
+        zoomInButton.addEventListener('click', () => zoom(0.5));
+        zoomOutButton.addEventListener('click', () => zoom(-0.5));
+        resetZoomButton.addEventListener('click', resetZoom);
+
+        function zoom(delta) {
+            currentZoom = Math.max(1, Math.min(5, currentZoom + delta));
+            updateTransform();
+        }
+
+        function resetZoom() {
+            currentZoom = 1.5;
+            translateX = 0;
+            translateY = 0;
+            updateTransform();
+        }
+
+        function updateTransform() {
+            diagramWrapper.style.transform = `translate(-50%, -50%) translate(${translateX}px, ${translateY}px) scale(${currentZoom})`;
+        }
+
+        diagramWrapper.addEventListener('mousedown', startDrag);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', endDrag);
+
+        function startDrag(e) {
+            isDragging = true;
+            startX = e.clientX - translateX;
+            startY = e.clientY - translateY;
+        }
+
+        function drag(e) {
+            if (isDragging) {
+                translateX = e.clientX - startX;
+                translateY = e.clientY - startY;
+                updateTransform();
+            }
+        }
+
+        function endDrag() {
+            isDragging = false;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFileList();
+            mermaid.initialize({ startOnLoad: false });
+        });
+
+        async function loadFileList() {
+            try {
+                const response = await fetch('/list-files');
+                const files = await response.json();
+                const fileList = document.getElementById('file-list');
+                fileList.innerHTML = files.map(file => `<div class="file-item">${file}</div>`).join('');
+
+                // Add click event listeners to file items
+                document.querySelectorAll('.file-item').forEach(item => {
+                    item.addEventListener('click', () => loadFile(item.textContent));
+                });
+            } catch (error) {
+                console.error('Error loading file list:', error);
+            }
+        }
+
+        async function loadFile(fileName) {
+            try {
+                const response = await fetch(`/get-file/${fileName}`);
+                const content = await response.text();
+                resetZoom();
+                renderDiagram(content);
+            } catch (error) {
+                console.error('Error loading file:', error);
+            }
+        }
+
+        function renderDiagram(content) {
+            const diagramWrapper = document.getElementById('diagram-wrapper');
+
+            // Clear previous content
+            diagramWrapper.innerHTML = '';
+
+            // Create a new element for this render
+            const newDiagram = document.createElement('div');
+            newDiagram.className = 'mermaid';
+            newDiagram.textContent = content;
+            diagramWrapper.appendChild(newDiagram);
+
+            // Re-run mermaid render
+            mermaid.init(undefined, newDiagram);
+        }
+    </script>
+</body>
+
+</html>
